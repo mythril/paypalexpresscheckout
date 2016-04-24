@@ -21,12 +21,9 @@ class Gateway {
 	public function initiatePurchase(PurchaseDetails $p) {
 		$req = new Request($this->cfg);
 		return new IncompleteTransaction($req->send('SetExpressCheckout', array(
-			'PAYMENTREQUEST_0_AMT' => $p->getTotalPrice(),
-			'PAYMENTREQUEST_0_ITEMAMT' => '0.00',
-			'PAYMENTREQUEST_0_SHIPPINGAMT' => '0.00',
+			'PAYMENTREQUEST_0_AMT' => number_format($p->getTotalPrice(), 2, '.', ''),
 			'PAYMENTREQUEST_0_CURRENCYCODE' => $p->getCurrency(),
 			'PAYMENTREQUEST_0_PAYMENTACTION' => 'Sale',
-			'PAYMENTREQUEST_0_NOTIFYURL' => $p->getNotifyUrl(),
 			'RETURNURL' => $p->getReturnUrl(),
 			'CANCELURL' => $p->getCancelUrl(),
 			'useraction' => 'commit',
@@ -40,9 +37,8 @@ class Gateway {
 		return new PaymentResult($req->send('DoExpressCheckoutPayment', array(
 			'TOKEN' => $token,
 			'PAYERID' => $payerId,
-			'PAYMENTREQUEST_0_AMT' => $p->getTotalPrice(),
-			'PAYMENTREQUEST_0_ITEMAMT' => '0.00',
-			'PAYMENTREQUEST_0_SHIPPINGAMT' => '0.00',
+			'PAYMENTREQUEST_0_NOTIFYURL' => $p->getNotifyUrl(),
+			'PAYMENTREQUEST_0_AMT' => number_format($p->getTotalPrice(), 2, '.', ''),
 			'PAYMENTREQUEST_0_CURRENCYCODE' => $p->getCurrency(),
 			'PAYMENTREQUEST_0_PAYMENTACTION' => 'Sale',
 		)));
