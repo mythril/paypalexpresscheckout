@@ -18,10 +18,9 @@
 		}
 	],
 	"require": {
-		"php": "~5.3",
-		"curl": "~7"
+		"php": "~5.3"
 	},
 	"autoload": {
-		"psr-4": { "Mythril\\PayPal\\ExpressCheckout" : "src/" }
+		"psr-4": { "Mythril\\PayPal\\ExpressCheckout\\" : "src/" }
 	}
 }

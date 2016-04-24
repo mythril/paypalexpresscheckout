@@ -23,7 +23,7 @@ class BasicPurchaseDetails implements PurchaseDetails {
 		$this->notifyUrl = $notifyUrl;
 	}
 
-	public function getTotal() {
+	public function getTotalPrice() {
 		return $this->total;
 	}
 

@@ -2,14 +2,12 @@
 
 namespace Mythril\PayPal\ExpressCheckout;
 
-use Exception;
-
 class Request {
 	const SANDBOX = 'https://api-3t.sandbox.paypal.com/nvp';
 	const LIVE = 'https://api-3t.paypal.com/nvp';
 	protected $endPoint;
 	protected $cfg;
-	public function __construct(Confgiuration $cfg) {
+	public function __construct(Configuration $cfg) {
 		$this->cfg = $cfg;
 		$this->endPoint = $cfg->useSandbox() ? self::SANDBOX : self::LIVE;
 	}
@@ -44,6 +42,8 @@ class Request {
 			CURLOPT_RETURNTRANSFER => true,
 		);
 
+		curl_setopt_array($c, $options);
+
 		$response = curl_exec($c);
 
 		if ($response === false) {
@@ -52,13 +52,12 @@ class Request {
 			curl_close($c);
 			throw new Exception("cURL issued an error while trying to contact PayPal: [$code] $error");
 		}
+		
 		curl_close($c);
-
-		curl_setopt_array($c, $options);
 
 		$parsed = self::parseResponse($response);
 
-		if (empty($parsed['ACK']) || strpos($parsed['ACK']) === false) {
+		if (empty($parsed['ACK']) || strpos($parsed['ACK'], 'Success') === false) {
 			throw new Exception("PayPal API did not 'ACK'.");
 		}
 

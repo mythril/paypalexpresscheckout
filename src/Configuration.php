@@ -2,8 +2,6 @@
 
 namespace Mythril\PayPal\ExpressCheckout;
 
-use Exception;
-
 class Configuration {
 	protected $username;
 	protected $password;
@@ -22,16 +20,20 @@ class Configuration {
 			'username' => 'string',
 			'password'  => 'string',
 			'signature' => 'string',
-			'sandbox' => 'bool',
+			'sandbox' => 'boolean',
 		);
 		foreach ($required as $key => $type) {
 			if (empty($cfg[$key])) {
 				throw new Exception("Required configuration value is missing: '$key'");
 			}
 			if (gettype($cfg[$key]) !== $type) {
-				throw new Exception("Vonfiguration value is wrong type: '$key' was expected to be a '$type'");
+				throw new Exception("configuration value is wrong type: '$key' was expected to be a '$type'");
 			}
 		}
+		$this->username = $cfg['username'];
+		$this->password = $cfg['password'];
+		$this->signature = $cfg['signature'];
+		$this->sandbox = $cfg['sandbox'];
 	}
 	
 	public function getUsername() {

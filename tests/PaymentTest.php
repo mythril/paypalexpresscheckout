@@ -1,21 +1,27 @@
 <?php
 
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use Mythril\PayPal\ExpressCheckout\Configuration;
+use Mythril\PayPal\ExpressCheckout\Gateway;
+use Mythril\PayPal\ExpressCheckout\BasicPurchaseDetails;
+
 // this is not a unit test, it is meant to be ran manually
 // with real paypal sandbox credentials
 
-$configuration = new Configuration(__DIR__ . '/../phantom.cfg.php');
+$configuration = Configuration::fromFile(__DIR__ . '/../phantom.cfg.php');
 $gateway = new Gateway($configuration);
 $purchase = new BasicPurchaseDetails(
-	$total,
-	$currency,
-	$cancelUrl,
-	$returnUrl,
-	$notifyUrl
+	'12.34',
+	'USD',
+	'https://cancel.com/',
+	'https://return.com/',
+	'https://notify.com/'
 );
 $incomplete = $gateway->initiatePurchase($purchase);
-$url = $incomplete->getRedirectUrl();
+$url = $gateway->getRedirectUrl($incomplete);
 $incompleteToken = $incomplete->getToken();
 
-redirect($url);
+exit;
 
-$completed = $gateway->completePurchase($incompleteToken);
+$completed = $gateway->completePurchase($incomplete, $payerId);
