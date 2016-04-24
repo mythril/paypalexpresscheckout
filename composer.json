@@ -1,0 +1,27 @@
+{
+	"name": "mythril/paypalexpresscheckout",
+	"type": "library",
+	"description": "PayPal ExpressCheckout API Wrapper",
+	"keywords": [
+		"gateway",
+		"merchant",
+		"pay",
+		"payment",
+		"paypal",
+		"purchase"
+	],
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Lucas Green",
+			"email": "lucas.m.green@gmail.com"
+		}
+	],
+	"require": {
+		"php": "~5.3",
+		"curl": "~7"
+	},
+	"autoload": {
+		"psr-4": { "Mythril\\PayPal\\ExpressCheckout" : "src/" }
+	}
+}
