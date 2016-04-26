@@ -42,4 +42,8 @@ class BasicPurchaseDetails implements PurchaseDetails {
 	public function getNotifyUrl() {
 		return $this->notifyUrl;
 	}
+
+	public function getExtras() {
+		return array();
+	}
 }

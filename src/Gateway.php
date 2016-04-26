@@ -7,8 +7,13 @@ class Gateway {
 	const SANDBOX_REDIRECT = 'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=';
 	const LIVE_REDIRECT = 'https://www.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=';
 	protected $cfg;
+	protected $extras = array();
 	public function __construct(Configuration $cfg) {
 		$this->cfg = $cfg;
+	}
+
+	public function setExtras(array $extras) {
+		$this->extras = $extras;
 	}
 
 	public function getRedirectUrl(IncompleteTransaction $tx) {
@@ -18,18 +23,25 @@ class Gateway {
 		return self::LIVE_REDIRECT . $tx->getToken();
 	}
 
+	protected static function fmt($money) {
+		return number_format($money, 2, '.', '');
+	}
+
 	public function initiatePurchase(PurchaseDetails $p) {
 		$req = new Request($this->cfg);
-		return new IncompleteTransaction($req->send('SetExpressCheckout', array(
-			'PAYMENTREQUEST_0_AMT' => number_format($p->getTotalPrice(), 2, '.', ''),
+		$details = array(
+			'PAYMENTREQUEST_0_AMT' => self::fmt($p->getTotalPrice()),
 			'PAYMENTREQUEST_0_CURRENCYCODE' => $p->getCurrency(),
 			'PAYMENTREQUEST_0_PAYMENTACTION' => 'Sale',
 			'RETURNURL' => $p->getReturnUrl(),
 			'CANCELURL' => $p->getCancelUrl(),
+			'MAXAMT' =>  self::fmt($p->getTotalPrice()),
 			'useraction' => 'commit',
 			'NOSHIPPING' => 1,
 			'ADDROVERRIDE' => 0,
-		)));
+		) + $this->extras + $p->getExtras();
+		
+		return new IncompleteTransaction($req->send('SetExpressCheckout', $details));
 	}
 
 	public function completePurchase(PurchaseDetails $p, $token, $payerId) {
@@ -37,8 +49,9 @@ class Gateway {
 		return new PaymentResult($req->send('DoExpressCheckoutPayment', array(
 			'TOKEN' => $token,
 			'PAYERID' => $payerId,
+			'MAXAMT' =>  self::fmt($p->getTotalPrice()),
 			'PAYMENTREQUEST_0_NOTIFYURL' => $p->getNotifyUrl(),
-			'PAYMENTREQUEST_0_AMT' => number_format($p->getTotalPrice(), 2, '.', ''),
+			'PAYMENTREQUEST_0_AMT' => self::fmt($p->getTotalPrice()),
 			'PAYMENTREQUEST_0_CURRENCYCODE' => $p->getCurrency(),
 			'PAYMENTREQUEST_0_PAYMENTACTION' => 'Sale',
 		)));

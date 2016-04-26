@@ -22,6 +22,6 @@ $incomplete = $gateway->initiatePurchase($purchase);
 $url = $gateway->getRedirectUrl($incomplete);
 $incompleteToken = $incomplete->getToken();
 
-exit;
+//exit;
 
-$completed = $gateway->completePurchase($incomplete, $payerId);
+$completed = $gateway->completePurchase($purchase, $incompleteToken, 'asdf');

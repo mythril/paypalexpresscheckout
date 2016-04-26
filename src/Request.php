@@ -30,7 +30,7 @@ class Request {
 		$data['USER'] = $this->cfg->getUsername();
 		$data['PWD'] = $this->cfg->getPassword();
 		$data['SIGNATURE'] = $this->cfg->getSignature();
-
+		
 		$options = array(
 			CURLOPT_URL => $this->endPoint,
 			CURLOPT_SSL_VERIFYPEER => true,

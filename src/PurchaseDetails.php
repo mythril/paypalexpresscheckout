@@ -8,4 +8,5 @@ interface PurchaseDetails {
 	public function getReturnUrl();
 	public function getCancelUrl();
 	public function getNotifyUrl();
+	public function getExtras();
 }
