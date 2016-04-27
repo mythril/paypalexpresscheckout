@@ -30,7 +30,7 @@ class Request {
 		$data['USER'] = $this->cfg->getUsername();
 		$data['PWD'] = $this->cfg->getPassword();
 		$data['SIGNATURE'] = $this->cfg->getSignature();
-		
+
 		$options = array(
 			CURLOPT_URL => $this->endPoint,
 			CURLOPT_SSL_VERIFYPEER => true,
@@ -52,13 +52,13 @@ class Request {
 			curl_close($c);
 			throw new Exception("cURL issued an error while trying to contact PayPal: [$code] $error");
 		}
-		
+
 		curl_close($c);
 
 		$parsed = self::parseResponse($response);
 
 		if (empty($parsed['ACK']) || strpos($parsed['ACK'], 'Success') === false) {
-			throw new Exception("PayPal API did not 'ACK'.");
+			throw new Exception("PayPal API did not 'ACK'. " . var_export($parsed, true));
 		}
 
 		return $parsed;
