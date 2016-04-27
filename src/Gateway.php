@@ -36,11 +36,10 @@ class Gateway {
 			'RETURNURL' => $p->getReturnUrl(),
 			'CANCELURL' => $p->getCancelUrl(),
 			'MAXAMT' =>  self::fmt($p->getTotalPrice()),
-			'useraction' => 'commit',
 			'NOSHIPPING' => 1,
 			'ADDROVERRIDE' => 0,
 		) + $this->extras + $p->getExtras();
-		
+
 		return new IncompleteTransaction($req->send('SetExpressCheckout', $details));
 	}
 
