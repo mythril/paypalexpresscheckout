@@ -23,7 +23,7 @@ class Configuration {
 			'sandbox' => 'boolean',
 		);
 		foreach ($required as $key => $type) {
-			if (empty($cfg[$key])) {
+			if (array_key_exists($key, $cfg) === false) {
 				throw new Exception("Required configuration value is missing: '$key'");
 			}
 			if (gettype($cfg[$key]) !== $type) {
