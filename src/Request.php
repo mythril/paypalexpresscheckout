@@ -31,6 +31,8 @@ class Request {
 		$data['PWD'] = $this->cfg->getPassword();
 		$data['SIGNATURE'] = $this->cfg->getSignature();
 
+		$this->cfg->log('End Point: ' . $this->endPoint);
+
 		$options = array(
 			CURLOPT_URL => $this->endPoint,
 			CURLOPT_SSL_VERIFYPEER => true,

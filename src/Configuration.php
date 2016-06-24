@@ -7,6 +7,7 @@ class Configuration {
 	protected $password;
 	protected $signature;
 	protected $sandbox;
+	protected $logger;
 	
 	public static function fromFile($configFile) {
 		if (!file_exists($configFile)) {
@@ -15,7 +16,16 @@ class Configuration {
 		return new self(include($configFile));
 	}
 
-	public function __construct(array $cfg) {
+	public static function noop($data) {
+		
+	}
+
+	public function log($data) {
+		call_user_func($this->logger, $data);
+	}
+
+	public function __construct(array $cfg, $logger = 'Configuration::noop') {
+		$this->logger = $logger;
 		$required = array(
 			'username' => 'string',
 			'password'  => 'string',
