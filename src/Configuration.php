@@ -24,7 +24,7 @@ class Configuration {
 		call_user_func($this->logger, $data);
 	}
 
-	public function __construct(array $cfg, $logger = 'Configuration::noop') {
+	public function __construct(array $cfg, $logger = 'Mythril\PayPal\ExpressCheckout\Configuration::noop') {
 		$this->logger = $logger;
 		$required = array(
 			'username' => 'string',
