@@ -11,17 +11,6 @@ use Mythril\PayPal\ExpressCheckout\BasicPurchaseDetails;
 
 $configuration = Configuration::fromFile(__DIR__ . '/../phantom.cfg.php');
 $gateway = new Gateway($configuration);
-$purchase = new BasicPurchaseDetails(
-	'12.34',
-	'USD',
-	'https://cancel.com/',
-	'https://return.com/',
-	'https://notify.com/'
-);
-$incomplete = $gateway->initiatePurchase($purchase);
-$url = $gateway->getRedirectUrl($incomplete);
-$incompleteToken = $incomplete->getToken();
+$result = $gateway->verifyCredentials();
 
-//exit;
-
-$completed = $gateway->completePurchase($purchase, $incompleteToken, 'asdf');
+var_dump($result);

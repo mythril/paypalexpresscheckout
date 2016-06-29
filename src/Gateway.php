@@ -43,6 +43,21 @@ class Gateway {
 		return new IncompleteTransaction($req->send('SetExpressCheckout', $details));
 	}
 
+	public function verifyCredentials() {
+		$details = array(
+			'PAYMENTREQUEST_0_AMT' => '0.01',
+			'RETURNURL' => 'http://nope.com/return',
+			'CANCELURL' => 'http://nope.com/cancel',
+		);
+		$req = new Request($this->cfg);
+		try {
+			$req->send('SetExpressCheckout', $details);
+			return true;
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+
 	public function completePurchase(PurchaseDetails $p, $token, $payerId) {
 		$req = new Request($this->cfg);
 		return new PaymentResult($req->send('DoExpressCheckoutPayment', array(
